@@ -169,7 +169,9 @@ DeviceFileEvents
 | where ActionType == "FileCreated" and InitiatingProcessFileName in~ (processComWithGoogleAPI)
 ```
 
-An example output is shown below
+An example output from the query is shown below
+
+![image](https://user-images.githubusercontent.com/16122365/235535924-11e36956-fc39-4504-adea-7e15a46d92f7.png)
 
 The below query can be used to pivot for processes and commandlines associated with the processes that had performed the initial network connections.
 
@@ -182,6 +184,11 @@ let processComWithGoogleAPI = DeviceNetworkEvents
 DeviceFileEvents
 | where ActionType == "FileCreated" and InitiatingProcessFileName in~ (processComWithGoogleAPI)
 ```
+
+An example output from the query is shown below
+
+![image](https://user-images.githubusercontent.com/16122365/235536726-4e29af44-d7df-41d8-b513-797400daebaa.png)
+
 
 ## Identifying data exfiltration
 
