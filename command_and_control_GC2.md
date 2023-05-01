@@ -149,8 +149,6 @@ DeviceNetworkEvents
 //| where visitedURLs contains "oauth2.googleapis.com" and visitedURLs has_any ("sheets.googleapis.com","drive.googleapis.com") // may allow for higher fidelity as the GC2 go application communicates to both the google drive folder and sheets API.
 ```
 
-![image](https://user-images.githubusercontent.com/16122365/235533287-488b4d14-e2d6-4e07-aee1-62ea11cebefe.png)
-
 As you can see the activity has been picked up based on the telemetry forwarded from the victim host
 
 ![image](https://user-images.githubusercontent.com/16122365/235533237-9b3a5ca2-cb43-4c88-aac5-7653e08537ba.png)
@@ -161,6 +159,29 @@ Below I will cover off the ability to download files (T1544: Ingress Tool Transf
 
 The below query is an example of how we can use our initial query to identify suspicious process filenames that are communicating with Google APIs and to use the distinct list of names as a filter to search for files created on the host which could indicate a tool being transferred from the C2 to the victim.
 
+```
+let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
+let processComWithGoogleAPI = DeviceNetworkEvents 
+| where not(InitiatingProcessFileName has_any (excludedProcessFileNames))
+| where RemoteUrl has_any ("oauth2.googleapis.com","sheets.googleapis.com","drive.googleapis.com") and isnotempty(InitiatingProcessFileName)
+| distinct InitiatingProcessFileName;
+DeviceFileEvents
+| where ActionType == "FileCreated" and InitiatingProcessFileName in~ (processComWithGoogleAPI)
+```![image](https://user-images.githubusercontent.com/16122365/235535250-5d77892e-ac70-457d-9ebc-9f31782a3f98.png)
+
+An example output is shown below
+
+The below query can be used to pivot for processes and commandlines associated with the processes that had performed the initial network connections.
+
+```
+let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
+let processComWithGoogleAPI = DeviceNetworkEvents 
+| where not(InitiatingProcessFileName has_any (excludedProcessFileNames))
+| where RemoteUrl has_any ("oauth2.googleapis.com","sheets.googleapis.com","drive.googleapis.com","www.googleapis.com") and isnotempty(InitiatingProcessFileName)
+| distinct InitiatingProcessFileName;
+DeviceFileEvents
+| where ActionType == "FileCreated" and InitiatingProcessFileName in~ (processComWithGoogleAPI)
+```
 
 ## Identifying data exfiltration
 
