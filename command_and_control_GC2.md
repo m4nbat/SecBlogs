@@ -41,8 +41,10 @@ Next we need to compile the code using build.
 
 To generate a windows compatible executable we ensure we are in the project folder and set OS and architecture variables:
 
-`export GOOS=windows`
-`export GOARCH=amd64`
+```
+export GOOS=windows
+export GOARCH=amd64
+```
 
 Then we build the Windows binary using:
 
@@ -50,7 +52,9 @@ Then we build the Windows binary using:
 
 Before restoring the operating system and architecture variables:
 
-`unset GOOS`
-`unset GOARCH`
+```
+unset GOOS
+unset GOARCH
+```
 
 
