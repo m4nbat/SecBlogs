@@ -167,7 +167,7 @@ let processComWithGoogleAPI = DeviceNetworkEvents
 | distinct InitiatingProcessFileName;
 DeviceFileEvents
 | where ActionType == "FileCreated" and InitiatingProcessFileName in~ (processComWithGoogleAPI)
-```![image](https://user-images.githubusercontent.com/16122365/235535250-5d77892e-ac70-457d-9ebc-9f31782a3f98.png)
+```
 
 An example output is shown below
 
