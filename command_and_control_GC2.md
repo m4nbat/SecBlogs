@@ -147,9 +147,11 @@ DeviceNetworkEvents
 | summarize visitedURLs=make_list(RemoteUrl) by ActionType, DeviceName, InitiatingProcessAccountName, InitiatingProcessParentFileName, InitiatingProcessFileName
 | project ActionType, DeviceName, InitiatingProcessAccountName, InitiatingProcessParentFileName, InitiatingProcessFileName, visitedURLs, Connections=array_length(visitedURLs)
 //| where visitedURLs contains "oauth2.googleapis.com" and visitedURLs has_any ("sheets.googleapis.com","drive.googleapis.com") // may allow for higher fidelity as the GC2 go application communicates to both the google drive folder and sheets API.
-```![image](https://user-images.githubusercontent.com/16122365/235533287-488b4d14-e2d6-4e07-aee1-62ea11cebefe.png)
+```
 
-As you can see the activity has been picked up based on the telemetry forwraded from the victim host
+![image](https://user-images.githubusercontent.com/16122365/235533287-488b4d14-e2d6-4e07-aee1-62ea11cebefe.png)
+
+As you can see the activity has been picked up based on the telemetry forwarded from the victim host
 
 ![image](https://user-images.githubusercontent.com/16122365/235533237-9b3a5ca2-cb43-4c88-aac5-7653e08537ba.png)
 
