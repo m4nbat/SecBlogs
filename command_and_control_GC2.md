@@ -152,3 +152,24 @@ DeviceNetworkEvents
 As you can see the activity has been picked up based on the telemetry forwraded from the victim host
 
 ![image](https://user-images.githubusercontent.com/16122365/235533237-9b3a5ca2-cb43-4c88-aac5-7653e08537ba.png)
+
+## Identifying files created by the suspicious process making connections to Google APIs
+
+Below I will cover off the ability to download files (T1544: Ingress Tool Transfer) from the C2. In this instance, we have downloaded an enumeration script that can be used by the attacker to perform discovery of the local system and connected network.
+
+The below query is an example of how we can use our initial query to identify suspicious process filenames that are communicating with Google APIs and to use the distinct list of names as a filter to search for files created on the host which could indicate a tool being transferred from the C2 to the victim.
+
+
+## Identifying data exfiltration
+
+GC2 provides the ability to exfiltrate data (T1567.002:Exfiltration Over Web Service: Exfiltration to Cloud Storage) from the endpoint to the Google Drive. The image below illustrates how the data appears in the specified Google drive.
+
+![image](https://user-images.githubusercontent.com/16122365/235534782-46f06ea9-c89a-48a6-affb-7bd86332d440.png)
+
+Defender for Cloud Apps is pretty good at this and could be used to identify and alert on a high volume of data uploaded to Google. This could prove tricky if G Suite is being used in the organisation.
+
+![image](https://user-images.githubusercontent.com/16122365/235534607-f73f210c-72e1-4cf7-b795-2513eaa80ee7.png)
+
+## Conclusion
+
+In conclusion, attackers are constantly adapting and finding new ways to leverage legitimate services for malicious purposes. In this case, we've demonstrated how Google Cloud Services can be used as a command and control infrastructure. By understanding these techniques and using the proper tools and queries, we can identify and detect such activities to protect our systems and networks.
