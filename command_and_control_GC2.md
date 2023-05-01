@@ -121,7 +121,32 @@ However, its worth noting that calls to .googleapis.com will be quite noisy if w
 
 The DeviceNetworkEvents table in MDE advanced hunting would seem an obvious choice to start with. First I will execute a query to identify connections to the *.googleapis.com domain.
 
-![image](https://user-images.githubusercontent.com/16122365/235533462-2ae64e9e-4ac6-4514-8189-ea5e49aca5c8.png)
+![image](https://user-images.githubusercontent.com/16122365/235533640-15f12acd-5e36-46ea-b65f-d50f099492d1.png)
+
+Based on what we see above we can build out the start of our query. The below line of code can be used to exclude common browser process filenames but their are likely many more that need to be added based on evaluation of the operating environment.
+
+![image](https://user-images.githubusercontent.com/16122365/235533734-fe856df1-e468-40ba-9ca7-0fd89fb722c8.png)
+
+Next we can make sure were only looking at connections to the endpoints we care about. The query below works well as it is and can be used to detect the behaviour related to the GC2 offensive tool.
+
+![image](https://user-images.githubusercontent.com/16122365/235533844-8c48d4a1-fe58-47c3-9542-1984844b7ee8.png)
+
+In the end I decided to create an additional field called visitedURLs that would hold a dynamic set of the RemoteUrl's visited in the time period of the query. This can be used to do analysis and filtering in a noisy environment.
+
+![image](https://user-images.githubusercontent.com/16122365/235534156-c7883783-0ee3-4ce0-b2c3-8124656f8ac5.png)
+
+I then used project to produce a more clear field output for the analyst and to add a count of the number of connections identified in the array.
+
+![image](https://user-images.githubusercontent.com/16122365/235534084-90a42f90-8e85-4fbe-adf0-d63ca57dc86d.png)
+
+
+
+
+
+
+
+
+
 
 
 The final query can be seen below:
