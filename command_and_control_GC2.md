@@ -113,9 +113,7 @@ As you can see ien the below image the files are uploaded to Google drive
 
 In this scenario we understand that the C2 framework will programmatically interact with the endpoints on the *.googleapis.com domain. In particular we will want to monitor for oauth2.googleapis.com, sheets.googleapis.com, and drive.googleapis.com.
 
-However, its worth noting that calls to .googleapis.com will be quite noisy if we don't include some process exclusions. For example browsers and some desktop apps may cause false positives. Toi start with we will want to exclude common browser process filenames, updaters for chrome or legitimate other google related applications.
-
-
+However, its worth noting that calls to .googleapis.com will be quite noisy if we don't include some process exclusions. For example browsers and some desktop apps may cause false positives. To start with we will want to exclude common browser process filenames, updaters for chrome or legitimate other google related applications.
 
 ### Kusto query to detect this network behaviour
 
@@ -139,17 +137,7 @@ I then used project to produce a more clear field output for the analyst and to 
 
 ![image](https://user-images.githubusercontent.com/16122365/235534084-90a42f90-8e85-4fbe-adf0-d63ca57dc86d.png)
 
-
-
-
-
-
-
-
-
-
-
-The final query can be seen below:
+### Final KQL query
 
 ```
 let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
