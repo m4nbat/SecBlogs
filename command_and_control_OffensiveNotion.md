@@ -2,7 +2,7 @@
 
 Attackers come up with creative ways to abuse cloud services for their own purposes. This blog will cover how attackers have leveraged Notion online workbooks to provide a command and control infrastructure to interact with victims via the OffensiveNotion agent. The attack flow of an attack that leverages Notion cloud infrastructure is illustrated below:
 
-![image](https://user-images.githubusercontent.com/16122365/235894469-7e47fce6-c1ff-4355-b653-4d3726b1286e.png)
+![image](https://user-images.githubusercontent.com/16122365/235897423-28a8e75e-591d-4d53-b0f5-7261d27625e4.png)
 
 Utilising popular cloud infrastructure provides several benefits to the attacker:
 
