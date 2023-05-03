@@ -80,15 +80,21 @@ Getting config options!
 [*] Enter Config File Path > [leave blank]
 [*] Enter Log Level (1-4) > 2
 ```
-Once run, you should see a new sub page created in your Notion parent page that is representative of the hostname of the victim device.
+6. Once run, you should see a new sub page created in your Notion parent page that is representative of the hostname of the victim device.
 
 ![image](https://user-images.githubusercontent.com/16122365/235894877-9276b54d-8f82-4c44-b64c-d93ad7fbbd58.png)
 
+7. By clicking on the hostname entry we can enter a sub-page and start to interact with the agent.
+
+![image](https://user-images.githubusercontent.com/16122365/235903428-abcc7ae1-5462-41fc-a59f-7433468d2048.png)
+
 ## Example commands and output:
+
+A full list of the tools capabilities and commands are listed here: https://github.com/mttaggart/OffensiveNotion/wiki/6.-Agent-Interaction. For the purposes of the blog I will provide some examples and then provide advice how we could go about huning for and detecting related behaviours.
 
 ### Discovery
 
-
+Once the bad guys have established a comamnd and control connection to the victim it is common place for commands to be run to discover more about the system, users, domain, software installed, networks its connected to and so on. To do this they will often use living off the land techniques such as PowerShell, WMI, cmd etc. or in some instances they will automate the process by downloading scripts that can be run on the hist providing an output of the results to the console or to a file that can be retrieved.
 
 ### Persistence
 
