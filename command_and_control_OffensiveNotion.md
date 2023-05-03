@@ -90,15 +90,36 @@ Getting config options!
 
 ![image](https://user-images.githubusercontent.com/16122365/235903428-abcc7ae1-5462-41fc-a59f-7433468d2048.png)
 
+8. When in the subpage select Empty page and you are ready to start interacting with the OffensiveNotion agent
+
+![image](https://user-images.githubusercontent.com/16122365/235906588-c1c950d0-072b-4940-810f-59f44a5d73b9.png)
+
 ## Example commands and output:
 
 A full list of the tools capabilities and commands are listed here: https://github.com/mttaggart/OffensiveNotion/wiki/6.-Agent-Interaction. For the purposes of the blog I will provide some examples and then provide advice how we could go about huning for and detecting related behaviours.
 
+To start issuing commands to the agent you first have to create a todo list
+
+![image](https://user-images.githubusercontent.com/16122365/235906801-dd20c0b7-0750-4888-8299-c4d9f0452d4e.png)
+
+The command syntax looks something like the below. Complete commands require the target emoji before they will be executed by the agent.
+
+![image](https://user-images.githubusercontent.com/16122365/235907555-b7b5f399-0e74-49c2-b198-2e6758561cca.png)
+
+
 ### Discovery
 
-Once the bad guys have established a comamnd and control connection to the victim it is common place for commands to be run to discover more about the system, users, domain, software installed, networks its connected to and so on. To do this they will often use living off the land techniques such as PowerShell, WMI, cmd etc. or in some instances they will automate the process by downloading scripts that can be run on the hist providing an output of the results to the console or to a file that can be retrieved.
+Once the bad guys have established a comamnd and control connection to the victim it is common place for commands to be run to discover more about the system, users, domain, software installed, networks its connected to and so on. To do this they will often use living off the land techniques such as PowerShell, WMI, cmd etc. or in some instances they will automate the process by downloading scripts that can be run on the host providing an output of the results to the console or to a file that can be retrieved.
+
+The below images provide an illustration of the commands that can be run and subsequent output recorded in the Notion page.
+
+
 
 ### Persistence
+
+Once access to the victim is established the attackers will install persistence mechanisms to facilitate ongoing access to the victim(s) and associated networks. Often this is done through malicious services, registry run kys or autostart locations, scheduled tasks, or more sneakily via creation of Windows Management Instrumentation (WMI) event subscriptions.
+
+To demonstrate this we have selected the WMI event subscription method that will create an event subscription that will trigger on reboot and restore the C2 connectivity via the Notion API.
 
 
 
