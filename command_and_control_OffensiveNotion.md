@@ -82,7 +82,7 @@ Getting config options!
 ```
 Once run, you should see a new sub page created in your Notion parent page that is representative of the hostname of the victim device.
 
-![image](https://user-images.githubusercontent.com/16122365/235887128-e0e15269-6208-4ada-9627-8f1cbab3a861.png)
+![image](https://user-images.githubusercontent.com/16122365/235894877-9276b54d-8f82-4c44-b64c-d93ad7fbbd58.png)
 
 ## Example commands and output:
 
