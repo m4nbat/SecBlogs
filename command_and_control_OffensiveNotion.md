@@ -4,7 +4,7 @@ Attackers come up with creative ways to abuse cloud services for their own purpo
 
 ![image](https://user-images.githubusercontent.com/16122365/235897423-28a8e75e-591d-4d53-b0f5-7261d27625e4.png)
 
-Utilising popular cloud infrastructure provides several benefits to the attacker:
+Utilising popular cloud infrastructure provides several benefits to the attacker: 
 
 - Low cost infrastructure
 - Traffic tends to blend in with normal personal / business internet usage
