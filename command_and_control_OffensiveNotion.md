@@ -2,7 +2,7 @@
 
 Attackers come up with creative ways to abuse cloud services for their own purposes. This blog will cover how attackers have leveraged Notion online workbooks to provide a command and control infrastructure to interact with victims via the OffensiveNotion agent. The attack flow of an attack that leverages Notion cloud infrastructure is illustrated below:
 
-**![image](https://user-images.githubusercontent.com/16122365/235530695-58e2b2cc-1550-480f-867d-186380492599.png)**
+![image](https://user-images.githubusercontent.com/16122365/235894469-7e47fce6-c1ff-4355-b653-4d3726b1286e.png)
 
 Utilising popular cloud infrastructure provides several benefits to the attacker:
 
@@ -11,49 +11,9 @@ Utilising popular cloud infrastructure provides several benefits to the attacker
 - Not many organisations can/will block Google cloud services 
 - Out of the box not many security tools pick up the network communication as malicious
 
-# Install pre-requistes and compile the go program
+# Install pre-requistes and compile the rust program
 
-First we need to grab the project from Github:
-
-`git clone https://github.com/looCiprian/GC2-sheet`
-
-Make sure go is installed, if it isn't download from: 
-
-`https://go.dev/doc/install`
-
-On Linux you can download the package and then install using:
-
-`sudo tar -C /usr/local -xzf go1.20.3.linux-amd64.tar.gz`
-
-Then add go to your PATH:
-
-`export PATH=$PATH:/usr/local/go/bin`
-
-Check your version and were ready to go (excuse the pun :))
-
-`go version`
-
-Next we need to compile the code using build.
-
-`go build gc2-sheet.go`
-
-To generate a windows compatible executable we ensure we are in the project folder and set OS and architecture variables:
-
-```
-export GOOS=windows
-export GOARCH=amd64
-```
-
-Then we build the Windows binary using:
-
-`go build -o gc2-sheet.exe`
-
-Before restoring the operating system and architecture variables:
-
-```
-unset GOOS
-unset GOARCH
-```
+TBD - Not required for this blog.
 
 # Configure the Notion components
 
