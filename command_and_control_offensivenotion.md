@@ -1,0 +1,224 @@
+# Attackers Leveraging Google Cloud Services for Command and Control
+
+Attackers come up with creative ways to abuse cloud services for their own purposes. This blog will cover how attackers have leveraged Google cloud services in the form of the Google API, Drive and Sheets services to provide a command and control infrastructure to interact with the victim. The attack flow of an attack that leverages Google cloud infrastructure is illustrated below:
+
+**![image](https://user-images.githubusercontent.com/16122365/235530695-58e2b2cc-1550-480f-867d-186380492599.png)**
+
+Utilising popular cloud infrastructure provides several benefits to the attacker:
+
+- Low cost infrastructure
+- Traffic tends to blend in with normal personal / business internet usage
+- Not many organisations can/will block Google cloud services 
+- Out of the box not many security tools pick up the network communication as malicious
+
+# Install pre-requistes and compile the go program
+
+First we need to grab the project from Github:
+
+`git clone https://github.com/looCiprian/GC2-sheet`
+
+Make sure go is installed, if it isn't download from: 
+
+`https://go.dev/doc/install`
+
+On Linux you can download the package and then install using:
+
+`sudo tar -C /usr/local -xzf go1.20.3.linux-amd64.tar.gz`
+
+Then add go to your PATH:
+
+`export PATH=$PATH:/usr/local/go/bin`
+
+Check your version and were ready to go (excuse the pun :))
+
+`go version`
+
+Next we need to compile the code using build.
+
+`go build gc2-sheet.go`
+
+To generate a windows compatible executable we ensure we are in the project folder and set OS and architecture variables:
+
+```
+export GOOS=windows
+export GOARCH=amd64
+```
+
+Then we build the Windows binary using:
+
+`go build -o gc2-sheet.exe`
+
+Before restoring the operating system and architecture variables:
+
+```
+unset GOOS
+unset GOARCH
+```
+
+# Configure the Notion components
+
+1. Create a Notion account at https://www.notion.so/signup
+
+![image](https://user-images.githubusercontent.com/16122365/235878558-5eb7fe30-a0df-4724-88f0-e822600e9680.png)
+
+2. Create a page on Notion that will be used to produce sub pages for each victim/C2 connection, interact with the OffensiveNotion agent installed on victim devices, and to receive results/outputs of interactions with the target.
+
+![image](https://user-images.githubusercontent.com/16122365/235880026-2dfa8cc8-cd1a-4973-b7f9-8f1c654fe9db.png)
+
+3. Head over to https://developers.notion.com/ and sign-in with a new or existing account and head to your integrations
+
+![image](https://user-images.githubusercontent.com/16122365/235880353-8b02d54f-9bec-4e83-9d7a-2de3f34fa988.png)
+
+4. Create a new integration
+
+![image](https://user-images.githubusercontent.com/16122365/235880696-2e656014-e438-4ec6-b2a1-ceeb6016f80d.png)
+
+5. Configure capabilities and permissions
+
+![image](https://user-images.githubusercontent.com/16122365/235880955-e661bc8c-3beb-469c-9494-a7bc57076ef5.png)
+
+6. Make a note of the internal integration token secret that will be used to authenticate and authorise against the Notion API
+
+![image](https://user-images.githubusercontent.com/16122365/235881183-b197cf67-0743-4766-a4e0-0d14de2be1ce.png)
+
+7. Head over to your newly created Notion page click the three dots at the top right and add a new connection
+
+![image](https://user-images.githubusercontent.com/16122365/235882256-9bcede44-0195-4de9-a675-a07658f452cb.png)
+
+8. Grab the page ID of your Notion page by hitting the share button and copying the link into an editor of choice
+
+![image](https://user-images.githubusercontent.com/16122365/235883290-086ad4f6-77d4-48e4-b485-e2aad1f72f06.png)
+
+9. Grab the id portion of the URL which will be used in the agent configuration
+
+![image](https://user-images.githubusercontent.com/16122365/235883605-33e05857-61b2-4f7b-add9-9a3b58317c28.png)
+
+
+# Testing the C2 Server
+
+Download the agent from the releases section of the Offensive Notion GitHub: https://github.com/mttaggart/OffensiveNotion/releases
+
+Transfer the windows binary created initial and the key file to the test victim host. It's possible to hardcode these to the binary however as its bank holiday weekend and we are just demonstrating capability we will use the command line to specify our keys and credentials.
+
+**IMAGE**
+
+Once run, you should see a new sub page created in your Notion page that is representative of the hostname of the victim device.
+
+**IMAGE**
+
+## Example commands and output:
+
+### Discovery
+
+
+
+### Persistence
+
+
+
+### Data ingress
+
+
+
+### Exfiltration
+
+
+
+# Detection
+
+In this scenario we understand that the C2 framework will programmatically interact with the endpoints on the *.googleapis.com domain. In particular we will want to monitor for oauth2.googleapis.com, sheets.googleapis.com, and drive.googleapis.com.
+
+However, its worth noting that calls to .googleapis.com will be quite noisy if we don't include some process exclusions. For example browsers and some desktop apps may cause false positives. To start with we will want to exclude common browser process filenames, updaters for chrome or legitimate other google related applications.
+
+## Kusto query to detect this network behaviour
+
+The DeviceNetworkEvents table in MDE advanced hunting would seem an obvious choice to start with. First I will execute a query to identify connections to the *.googleapis.com domain.
+
+**IMAGE**
+
+Based on what we see above we can build out the start of our query. The below line of code can be used to exclude common browser process filenames but their are likely many more that need to be added based on evaluation of the operating environment.
+
+**IMAGE**
+
+Next we can make sure were only looking at connections to the endpoints we care about. The query below works well as it is and can be used to detect the behaviour related to the GC2 offensive tool.
+
+**IMAGE**
+
+In the end I decided to create an additional field called visitedURLs that would hold a dynamic set of the RemoteUrl's visited in the time period of the query. This can be used to do analysis and filtering in a noisy environment.
+
+**IMAGE**
+
+I then used project to produce a more clear field output for the analyst and to add a count of the number of connections identified in the array.
+
+**IMAGE**
+
+## Final KQL query
+
+```
+let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
+DeviceNetworkEvents 
+| where not(InitiatingProcessFileName has_any (excludedProcessFileNames))
+| where RemoteUrl has_any ("oauth2.googleapis.com","sheets.googleapis.com","drive.googleapis.com") and isnotempty(InitiatingProcessFileName)
+| summarize visitedURLs=make_list(RemoteUrl) by ActionType, DeviceName, InitiatingProcessAccountName, InitiatingProcessParentFileName, InitiatingProcessFileName
+| project ActionType, DeviceName, InitiatingProcessAccountName, InitiatingProcessParentFileName, InitiatingProcessFileName, visitedURLs, Connections=array_length(visitedURLs)
+//| where visitedURLs contains "oauth2.googleapis.com" and visitedURLs has_any ("sheets.googleapis.com","drive.googleapis.com") // may allow for higher fidelity as the GC2 go application communicates to both the google drive folder and sheets API.
+```
+
+As you can see the activity has been picked up based on the telemetry forwarded from the victim host
+
+**IMAGE**
+
+## Identifying files created by the suspicious process making connections to Google APIs
+
+Below I will cover off the ability to download files (T1544: Ingress Tool Transfer) from the C2. In this instance, we have downloaded an enumeration script that can be used by the attacker to perform discovery of the local system and connected network.
+
+The below query is an example of how we can use our initial query to identify suspicious process filenames that are communicating with Google APIs and to use the distinct list of names as a filter to search for files created on the host which could indicate a tool being transferred from the C2 to the victim.
+
+```
+let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
+let processComWithGoogleAPI = DeviceNetworkEvents 
+| where not(InitiatingProcessFileName has_any (excludedProcessFileNames))
+| where RemoteUrl has_any ("oauth2.googleapis.com","sheets.googleapis.com","drive.googleapis.com") and isnotempty(InitiatingProcessFileName)
+| distinct InitiatingProcessFileName;
+DeviceFileEvents
+| where ActionType == "FileCreated" and InitiatingProcessFileName in~ (processComWithGoogleAPI)
+```
+
+An example output from the query is shown below
+
+**IMAGE**
+
+The below query can be used to pivot for processes and commandlines associated with the processes that had performed the initial network connections.
+
+```
+let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
+let processComWithGoogleAPI = DeviceNetworkEvents 
+| where not(InitiatingProcessFileName has_any (excludedProcessFileNames))
+| where RemoteUrl has_any ("oauth2.googleapis.com","sheets.googleapis.com","drive.googleapis.com","www.googleapis.com") and isnotempty(InitiatingProcessFileName)
+| distinct InitiatingProcessFileName;
+DeviceFileEvents
+| where ActionType == "FileCreated" and InitiatingProcessFileName in~ (processComWithGoogleAPI)
+```
+
+An example output from the query is shown below
+
+**IMAGE**
+
+
+## Identifying data exfiltration
+
+GC2 provides the ability to exfiltrate data (T1567.002:Exfiltration Over Web Service: Exfiltration to Cloud Storage) from the endpoint to Azure storage or AWS S3. The image below illustrates how the data appears in the specified Azure storage blob.
+
+**IMAGE**
+
+The image below illustrates how data can also be exfiltrated to an S3 bucket in AWS:
+
+**IMAGE**
+
+Defender for Cloud Apps is pretty good at this and could be used to identify and alert on a high volume of data uploaded to Google. This could prove tricky if Notion is being used widely across the organisation.
+
+**IMAGE**
+
+# Conclusion
+
+In conclusion, attackers are constantly adapting and finding new ways to leverage legitimate services for malicious purposes. In this case, we've demonstrated how Google Cloud Services can be used as a command and control infrastructure. By understanding the tools and procedures used by current threat groups we can perform micro emulation and understand what telemetry is available to improve our ability to detect, prevent, and respond to adversarial operations, improving overall security posture and awareness of the threat.
