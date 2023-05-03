@@ -54,7 +54,9 @@ TBD - Not required for this blog.
 ![image](https://user-images.githubusercontent.com/16122365/235883605-33e05857-61b2-4f7b-add9-9a3b58317c28.png)
 
 
-# Testing the C2 Server
+# Testing the C2 Server - Initial Access
+
+For the purposes of the blog I will not be delivering the payload but you can assume that any common initial access vector can be used and then the agent itself can be downloaded as a subsequent stage malware as is common with many intrusions.
 
 1. Download the agent from the releases section of the Offensive Notion GitHub: https://github.com/mttaggart/OffensiveNotion/releases. For the test we will use the Windows debug agent to keep things simple.
 
@@ -110,13 +112,13 @@ Once the bad guys have established a comamnd and control connection to the victi
 
 # Detection
 
-In this scenario we understand that the C2 framework will programmatically interact with the endpoints on the *.googleapis.com domain. In particular we will want to monitor for oauth2.googleapis.com, sheets.googleapis.com, and drive.googleapis.com.
+In this scenario we understand that the OffensiveNotion C2 framework will programmatically interact with the endpoint at api.notion.com.
 
-However, its worth noting that calls to .googleapis.com will be quite noisy if we don't include some process exclusions. For example browsers and some desktop apps may cause false positives. To start with we will want to exclude common browser process filenames, updaters for chrome or legitimate other google related applications.
+However, its worth noting that calls to api.notion.com will be quite noisy if we don't include some process exclusions. For example browsers and some desktop apps may cause false positives. To start with we will want to exclude common browser process file names or paths, and legitimate notion related applications.
 
 ## Kusto query to detect this network behaviour
 
-The DeviceNetworkEvents table in MDE advanced hunting would seem an obvious choice to start with. First I will execute a query to identify connections to the *.googleapis.com domain.
+The DeviceNetworkEvents table in MDE advanced hunting would seem an obvious choice to start with. First I will execute a query to identify connections to the api.notion.com.
 
 **IMAGE**
 
@@ -124,7 +126,7 @@ Based on what we see above we can build out the start of our query. The below li
 
 **IMAGE**
 
-Next we can make sure were only looking at connections to the endpoints we care about. The query below works well as it is and can be used to detect the behaviour related to the GC2 offensive tool.
+Next we can make sure were only looking at connections to the endpoints we care about. The query below works well as it is and can be used to detect the behaviour related to the OffensiveNotion tool.
 
 **IMAGE**
 
@@ -139,33 +141,21 @@ I then used project to produce a more clear field output for the analyst and to 
 ## Final KQL query
 
 ```
-let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
-DeviceNetworkEvents 
-| where not(InitiatingProcessFileName has_any (excludedProcessFileNames))
-| where RemoteUrl has_any ("oauth2.googleapis.com","sheets.googleapis.com","drive.googleapis.com") and isnotempty(InitiatingProcessFileName)
-| summarize visitedURLs=make_list(RemoteUrl) by ActionType, DeviceName, InitiatingProcessAccountName, InitiatingProcessParentFileName, InitiatingProcessFileName
-| project ActionType, DeviceName, InitiatingProcessAccountName, InitiatingProcessParentFileName, InitiatingProcessFileName, visitedURLs, Connections=array_length(visitedURLs)
-//| where visitedURLs contains "oauth2.googleapis.com" and visitedURLs has_any ("sheets.googleapis.com","drive.googleapis.com") // may allow for higher fidelity as the GC2 go application communicates to both the google drive folder and sheets API.
+KQL HERE
 ```
 
 As you can see the activity has been picked up based on the telemetry forwarded from the victim host
 
 **IMAGE**
 
-## Identifying files created by the suspicious process making connections to Google APIs
+## Identifying files created by the suspicious process making connections to Notion APIs
 
 Below I will cover off the ability to download files (T1544: Ingress Tool Transfer) from the C2. In this instance, we have downloaded an enumeration script that can be used by the attacker to perform discovery of the local system and connected network.
 
-The below query is an example of how we can use our initial query to identify suspicious process filenames that are communicating with Google APIs and to use the distinct list of names as a filter to search for files created on the host which could indicate a tool being transferred from the C2 to the victim.
+The below query is an example of how we can use our initial query to identify suspicious process filenames that are communicating with the Notion APIs and to use the distinct list of names as a filter to search for files created on the host which could indicate a tool being transferred from the C2 to the victim.
 
 ```
-let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
-let processComWithGoogleAPI = DeviceNetworkEvents 
-| where not(InitiatingProcessFileName has_any (excludedProcessFileNames))
-| where RemoteUrl has_any ("oauth2.googleapis.com","sheets.googleapis.com","drive.googleapis.com") and isnotempty(InitiatingProcessFileName)
-| distinct InitiatingProcessFileName;
-DeviceFileEvents
-| where ActionType == "FileCreated" and InitiatingProcessFileName in~ (processComWithGoogleAPI)
+KQL HERE
 ```
 
 An example output from the query is shown below
@@ -175,13 +165,7 @@ An example output from the query is shown below
 The below query can be used to pivot for processes and commandlines associated with the processes that had performed the initial network connections.
 
 ```
-let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
-let processComWithGoogleAPI = DeviceNetworkEvents 
-| where not(InitiatingProcessFileName has_any (excludedProcessFileNames))
-| where RemoteUrl has_any ("oauth2.googleapis.com","sheets.googleapis.com","drive.googleapis.com","www.googleapis.com") and isnotempty(InitiatingProcessFileName)
-| distinct InitiatingProcessFileName;
-DeviceFileEvents
-| where ActionType == "FileCreated" and InitiatingProcessFileName in~ (processComWithGoogleAPI)
+KQL HERE
 ```
 
 An example output from the query is shown below
