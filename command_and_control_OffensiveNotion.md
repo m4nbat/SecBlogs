@@ -195,15 +195,22 @@ An example output from the query is shown below
 
 ![image](https://user-images.githubusercontent.com/16122365/236261298-f6a2c2f6-855d-42a9-aa71-1964d0cfff22.png)
 
-The below query can be used to pivot for processes and commandlines associated with the processes that had performed the initial network connections.
+In addition to the above the below query can be used to pivot for processes and commandlines associated with the processes that had performed the initial network connections.
 
 ```
-KQL HERE
+let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
+DeviceNetworkEvents
+| where RemoteUrl contains "notion.com"
+| where not(InitiatingProcessFileName has_any (excludedProcessFileNames)) and InitiatingProcessVersionInfoCompanyName != "Notion Labs, Inc"
+| extend joinkey = strcat(InitiatingProcessFileName, DeviceName, InitiatingProcessAccountName)
+| join kind=leftouter (DeviceProcessEvents | extend joinkey = strcat(InitiatingProcessParentFileName, DeviceName, InitiatingProcessAccountName) | summarize ProcessesRanByParent = make_set(InitiatingProcessCommandLine) by joinkey) on joinkey
+| join kind=leftouter (DeviceFileEvents | where ActionType == "FileCreated" | extend joinkey = strcat(InitiatingProcessParentFileName, DeviceName, InitiatingProcessAccountName) | summarize FilesCreated = make_set(FileName) by joinkey) on joinkey
+| project TimeGenerated, DeviceName, InitiatingProcessAccountName, InitiatingProcessCommandLine, InitiatingProcessFolderPath, FilesCreated, ProcessesRanByParent, LocalIP, RemoteIP, RemoteUrl
 ```
 
-An example output from the query is shown below
+An example output from the query is displayed below
 
-**IMAGE**
+![image](https://user-images.githubusercontent.com/16122365/236263327-1602c230-f44b-474c-9510-b03fc1a40922.png)
 
 
 ## Identifying data exfiltration
