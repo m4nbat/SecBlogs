@@ -215,7 +215,7 @@ The image below illustrates how data can also be exfiltrated to an S3 bucket in 
 
 **IMAGE**
 
-Defender for Cloud Apps is pretty good at this and could be used to identify and alert on a high volume of data uploaded to Google. This could prove tricky if Notion is being used widely across the organisation.
+Defender for Cloud Apps is pretty good at this and could be used to identify and alert on a high volume of data uploaded to Google. This could prove tricky if Notion is being used widely across the organisation. 
 
 **IMAGE**
 
