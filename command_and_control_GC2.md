@@ -1,6 +1,6 @@
 # Attackers Leveraging Google Cloud Services for Command and Control
 
-Attackers come up with creative ways to abuse cloud services for their own purposes. This blog will cover how attackers have leveraged Google cloud services in the form of the Google API, Drive and Sheets services to provide a command and control infrastructure to interact with the victim. The attack flow of an attack that leverages Google cloud infrastructure is illustrated below:
+Attackers are coming up with new and creative ways to abuse cloud services for their own purposes. This blog will cover how attackers have leveraged Google cloud services to provide a command and control infrastructure to interact with their targets. The attack flow of an attack that leverages Google cloud infrastructure is illustrated below:
 
 ![image](https://user-images.githubusercontent.com/16122365/235530695-58e2b2cc-1550-480f-867d-186380492599.png)
 
@@ -11,7 +11,17 @@ Utilising popular cloud infrastructure provides several benefits to the attacker
 - Not many organisations can/will block Google cloud services 
 - Out of the box not many security tools pick up the network communication as malicious
 
+## Threat intelligence / Why we care!
 
+"In Google's April 2023 Threat Horizons Report, TAG (Threat Analysis) attributed a campaign to APT41 in which they were found abusing the GC2 (Google Command and control) tool in data theft attacks. APT41 is a Chinese state sponsored hacking group which has been around since 2012. They are also financially motivated and have been seen targeting Telecommunication, Healthcare and Technology sectors.
+
+GC2 (Google Command and Control) is a Command and Control application that allows an attacker to execute commands on the target machine using Google Sheet and exfiltrates data using Google Drive.
+
+In this campaign they used a phishing email with links to a password protected file which was hosted on a google drive. This automatically incorporates the GC2 tool that reads commands from google sheets and exfiltrate data using the cloud storage service. GC2 also enables the attacker to download additional files from Drive into the Victim system.
+
+APT41 is known for deploying a wide variety of malware on compromised systems although it's not clear which malwares was used in this campaign. They have been observed using cobalt strike and deploying Winnti in past campaigns.
+
+The use of GC2 by APT41 demonstrates the groups tendency to use open-source tools to increase chances of evading detection and also hinder activities such as attribution during post-incident investigations. Threat groups already utilise legitimate tools for this purpose during intrusions, such as Remote Management Software like TeamViewer, Atera etc. and this move by APT41 is another move in this direction."
 
 ## Install pre-requistes and compile the go program
 
@@ -202,4 +212,6 @@ Defender for Cloud Apps is pretty good at this and could be used to identify and
 
 ## Conclusion
 
-In conclusion, attackers are constantly adapting and finding new ways to leverage legitimate services for malicious purposes. In this case, we've demonstrated how Google Cloud Services can be used as a command and control infrastructure. By understanding the tools and procedures used by current threat groups we can perform micro emulation and understand what telemetry is available to improve our ability to detect, prevent, and respond to adversarial operations, improving overall security posture and awareness of the threat.
+In conclusion, attackers are constantly adapting and finding new ways to leverage legitimate services for malicious purposes. In this case, we've demonstrated how Google Cloud Services can be used as a command and control infrastructure. By understanding the tools, procedures, and operations used by current threat groups we can perform micro emulation and understand what telemetry is available to improve our ability to detect, prevent, and respond to adversarial operations. This provides a mechanism for improving overall security posture and awareness in the faceof new threats.
+
+A big thank you to Tom Wood, Dominic Mortimer, and Joshua Penny for contributing and supporting the development of this blog!
