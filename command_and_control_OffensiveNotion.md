@@ -143,9 +143,9 @@ An example of using Github to pull an enumeration script down to the host.
 
 ![image](https://user-images.githubusercontent.com/16122365/236192774-bc2cfdf2-b1d1-48a2-b9cb-a91924fb3fac.png)
 
-### Exfiltration
+### Collection and Exfiltration
 
-An example of performing collection and exfiltration of data to an Azure storage account.
+An example of downloading a tool or using PowerShell to perform collection and exfiltration of data to an Azure storage account.
 
 ![image](https://user-images.githubusercontent.com/16122365/236194819-05e234a8-e95e-430b-b8ca-556851500f84.png)
 
@@ -159,28 +159,18 @@ However, its worth noting that calls to api.notion.com will be quite noisy if we
 
 The DeviceNetworkEvents table in MDE advanced hunting would seem an obvious choice to start with. First I will execute a query to identify connections to the api.notion.com.
 
-**IMAGE**
+![image](https://user-images.githubusercontent.com/16122365/236221296-01d8fbc1-b058-4a41-aafa-178c98617f4b.png)
 
-Based on what we see above we can build out the start of our query. The below line of code can be used to exclude common browser process filenames but their are likely many more that need to be added based on evaluation of the operating environment.
+Based on what we see above we can build out the start of our query. The below line of code can be used to exclude common browser process filenames but their are likely many more that need to be added based on evaluation of the operating environment. Next we can make sure were only looking at connections to the endpoints we care about. The query below works well as it is and can be used to detect the behaviour related to the OffensiveNotion tool.
 
-**IMAGE**
-
-Next we can make sure were only looking at connections to the endpoints we care about. The query below works well as it is and can be used to detect the behaviour related to the OffensiveNotion tool.
-
-**IMAGE**
-
-In the end I decided to create an additional field called visitedURLs that would hold a dynamic set of the RemoteUrl's visited in the time period of the query. This can be used to do analysis and filtering in a noisy environment.
-
-**IMAGE**
-
-I then used project to produce a more clear field output for the analyst and to add a count of the number of connections identified in the array.
-
-**IMAGE**
+![image](https://user-images.githubusercontent.com/16122365/236220558-9eb5f41b-2efd-4b5a-9eb0-7e21d09e7159.png)
 
 ## Final KQL query
 
 ```
-KQL HERE
+let excludedProcesses = datatable(name:string)["browser1.exe","browser2.exe"]; //examples but check your environment first to remove false positives and use the filename and file path to reduce risk of false negative or evasion from the bad guys
+DeviceNetworkEvents
+| where RemoteUrl has "api.notion.com" and not (InitiatingProcessFileName has_any (excludedProcesses)) and InitiatingProcessVersionInfoCompanyName != "Notion Labs, Inc"
 ```
 
 As you can see the activity has been picked up based on the telemetry forwarded from the victim host
@@ -194,7 +184,10 @@ Below I will cover off the ability to download files (T1544: Ingress Tool Transf
 The below query is an example of how we can use our initial query to identify suspicious process filenames that are communicating with the Notion APIs and to use the distinct list of names as a filter to search for files created on the host which could indicate a tool being transferred from the C2 to the victim.
 
 ```
-KQL HERE
+let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe", "swi_fc.exe"]; //add more browsers or mail clients where needed for exclusion 
+DeviceNetworkEvents
+| where RemoteUrl has "api.notion.com" and not(InitiatingProcessFileName has_any (excludedProcessFileNames)) and InitiatingProcessVersionInfoCompanyName != "Notion Labs, Inc"
+| join DeviceFileEvents on InitiatingProcessFileName
 ```
 
 An example output from the query is shown below
