@@ -219,12 +219,18 @@ An example output from the query is displayed below
 
 ## Identifying data exfiltration
 
-OffensiveNotion provides the ability to exfiltrate data (T1567.002:Exfiltration Over Web Service: Exfiltration to Cloud Storage) from the endpoint to Azure storage or AWS S3. The image below illustrates how the data appears in the specified Azure storage blob.
+OffensiveNotion provides the ability to exfiltrate data (T1567.002:Exfiltration Over Web Service: Exfiltration to Cloud Storage) from the endpoint to Azure storage or AWS S3. The query below can be used to identify the activity.
 
-**IMAGE**
+```
+let excludedFilePath = datatable(name:string)[@"c:\windowsazure\guestagent",@"c:\program files\windows defender advanced threat protection\senseir.exe",@"c:\program files\microsoft monitoring agent\agent\healthservice.exe"]; //examples but check your environment first to remove false positives
+DeviceNetworkEvents
+| where RemoteUrl endswith ".blob.core.windows.net" and not (InitiatingProcessFolderPath has_any (excludedFilePath))
+| summarize make_list(RemoteUrl) by InitiatingProcessFileName, InitiatingProcessFolderPath
+```
 
+The image below illustrates how the data appears in the specified Azure storage blob.
 
-**IMAGE**
+![image](https://user-images.githubusercontent.com/16122365/236271164-4390494c-462a-4769-97b6-e2cfde4ce760.png)
 
 Defender for Cloud Apps is pretty good at this and could be used to identify and alert on a high volume of data uploaded to Google. This could prove tricky if Notion is being used widely across the organisation. 
 
