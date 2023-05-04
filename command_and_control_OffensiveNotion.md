@@ -149,6 +149,11 @@ An example of downloading a tool or using PowerShell to perform collection and e
 
 ![image](https://user-images.githubusercontent.com/16122365/236194819-05e234a8-e95e-430b-b8ca-556851500f84.png)
 
+As you can see the files have been uploaded successfully to the Azure storage blob.
+
+![image](https://user-images.githubusercontent.com/16122365/236266759-b0cb9e96-5d70-48b0-a6a6-75ab1a713353.png)
+
+
 # Detection
 
 In this scenario we understand that the OffensiveNotion C2 framework will programmatically interact with the endpoint at api.notion.com.
@@ -212,14 +217,12 @@ An example output from the query is displayed below
 
 ![image](https://user-images.githubusercontent.com/16122365/236263327-1602c230-f44b-474c-9510-b03fc1a40922.png)
 
-
 ## Identifying data exfiltration
 
-GC2 provides the ability to exfiltrate data (T1567.002:Exfiltration Over Web Service: Exfiltration to Cloud Storage) from the endpoint to Azure storage or AWS S3. The image below illustrates how the data appears in the specified Azure storage blob.
+OffensiveNotion provides the ability to exfiltrate data (T1567.002:Exfiltration Over Web Service: Exfiltration to Cloud Storage) from the endpoint to Azure storage or AWS S3. The image below illustrates how the data appears in the specified Azure storage blob.
 
 **IMAGE**
 
-The image below illustrates how data can also be exfiltrated to an S3 bucket in AWS:
 
 **IMAGE**
 
