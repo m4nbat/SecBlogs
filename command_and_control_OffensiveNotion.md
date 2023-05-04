@@ -181,18 +181,19 @@ As you can see the activity has been picked up based on the telemetry forwarded 
 
 Below I will cover off the ability to download files (T1544: Ingress Tool Transfer) from the C2. In this instance, we have downloaded an enumeration script that can be used by the attacker to perform discovery of the local system and connected network.
 
-The below query is an example of how we can use our initial query to identify suspicious process filenames that are communicating with the Notion APIs and to use the distinct list of names as a filter to search for files created on the host which could indicate a tool being transferred from the C2 to the victim.
+The below query is an example of how we can use our initial query to identify suspicious process filenames that are communicating with the Notion APIs that subsequently create files on the host which could indicate a tool being transferred from the C2 to the victim.
 
 ```
-let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe", "swi_fc.exe"]; //add more browsers or mail clients where needed for exclusion 
+let excludedProcessFileNames = datatable (browser:string)["teams.exe","GoogleUpdate.exe","outlook.exe","msedge.exe","chrome.exe","iexplorer.exe","brave.exe","firefox.exe"]; //add more browsers or mail clients where needed for exclusion 
 DeviceNetworkEvents
 | where RemoteUrl has "api.notion.com" and not(InitiatingProcessFileName has_any (excludedProcessFileNames)) and InitiatingProcessVersionInfoCompanyName != "Notion Labs, Inc"
-| join DeviceFileEvents on InitiatingProcessFileName
+| join DeviceFileEvents on InitiatingProcessFileName | where ActionType1 =~ "FileCreated"
+| project TimeGenerated1, ActionType, DeviceName, InitiatingProcessAccountDomain1, InitiatingProcessAccountName1, InitiatingProcessAccountSid1, InitiatingProcessCommandLine1, InitiatingProcessParentFileName1, InitiatingProcessFileName1, FileName
 ```
 
 An example output from the query is shown below
 
-**IMAGE**
+![image](https://user-images.githubusercontent.com/16122365/236261298-f6a2c2f6-855d-42a9-aa71-1964d0cfff22.png)
 
 The below query can be used to pivot for processes and commandlines associated with the processes that had performed the initial network connections.
 
