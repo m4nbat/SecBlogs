@@ -232,9 +232,8 @@ The image below illustrates how the data appears in the specified Azure storage 
 
 ![image](https://user-images.githubusercontent.com/16122365/236271164-4390494c-462a-4769-97b6-e2cfde4ce760.png)
 
-Defender for Cloud Apps is pretty good at this and could be used to identify and alert on a high volume of data uploaded to Google. This could prove tricky if Notion is being used widely across the organisation. 
+Defender for Cloud Apps could be used to identify and alert on a high volume of data uploaded to Blob storage or S3. This would require further tuning and baselining against normal user / device activity.
 
-**IMAGE**
 
 # Conclusion
 
