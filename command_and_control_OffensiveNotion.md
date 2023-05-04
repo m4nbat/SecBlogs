@@ -109,10 +109,24 @@ The command syntax looks something like the below. Complete commands require the
 
 ### Discovery
 
-Once the bad guys have established a comamnd and control connection to the victim it is common place for commands to be run to discover more about the system, users, domain, software installed, networks its connected to and so on. To do this they will often use living off the land techniques such as PowerShell, WMI, cmd etc. or in some instances they will automate the process by downloading scripts that can be run on the host providing an output of the results to the console or to a file that can be retrieved.
+Once the bad guys have established a command and control connection to the victim it is common place for commands to be executed to perform discovery to understand more about the system, users, domain, software installed, networks its connected to and so on. To do this they will often use living off the land techniques such as PowerShell, WMI, CMD etc. or in some instances they will automate the process by downloading scripts that can be run on the host providing an output of the results to the console or to a file that can be retrieved.
 
 The below images provide an illustration of the commands that can be run and subsequent output recorded in the Notion page.
 
+#### Host discovery
+
+![image](https://user-images.githubusercontent.com/16122365/236190674-1dd0d601-800c-4b0f-81f6-7e7d95e4efbd.png)
+
+
+#### Network discovery
+
+Gather the system network configuration.
+
+![image](https://user-images.githubusercontent.com/16122365/236192492-05ef67cf-7fde-4a7e-ae11-fe0dff34791c.png)
+
+Perform a portscan to discover other hosts on the local subnet.
+
+![image](https://user-images.githubusercontent.com/16122365/236191046-b82506fc-6c1b-4cfb-a85c-027e6ecd7f0e.png)
 
 
 ### Persistence
@@ -121,15 +135,19 @@ Once access to the victim is established the attackers will install persistence 
 
 To demonstrate this we have selected the WMI event subscription method that will create an event subscription that will trigger on reboot and restore the C2 connectivity via the Notion API.
 
-
+![image](https://user-images.githubusercontent.com/16122365/236193167-fc90cd67-e1b8-4df6-b581-cc01d210b3bd.png)
 
 ### Data ingress
 
+An example of using Github to pull an enumeration script down to the host.
 
+![image](https://user-images.githubusercontent.com/16122365/236192774-bc2cfdf2-b1d1-48a2-b9cb-a91924fb3fac.png)
 
 ### Exfiltration
 
+An example of performing collection and exfiltration of data to an Azure storage account.
 
+![image](https://user-images.githubusercontent.com/16122365/236194819-05e234a8-e95e-430b-b8ca-556851500f84.png)
 
 # Detection
 
