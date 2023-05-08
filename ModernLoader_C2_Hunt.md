@@ -24,6 +24,10 @@ First I try the hash to see whether any additional results are returned but unfo
 
 ![image](https://user-images.githubusercontent.com/16122365/236938008-94416b67-b2dc-4f83-8328-60165c605ece.png)
 
+The SSL fingerprint returns nothing:
+
+![image](https://user-images.githubusercontent.com/16122365/236939646-d0d60299-0887-4607-bb74-be7bc2edf79f.png)
+
 Next I try using the header information but removing the date elements:
 
 ![image](https://user-images.githubusercontent.com/16122365/236938338-0bb6124e-cec1-4702-a2c8-2d090e5894d8.png)
@@ -58,19 +62,21 @@ However some of the other results currently have no detections:
 
 ![image](https://user-images.githubusercontent.com/16122365/236945744-7b03a5b4-84ac-4de6-99f2-2665b412efbf.png)
 
-
+![image](https://user-images.githubusercontent.com/16122365/236945551-d32849d3-d53b-44b1-847d-f89348c79eaa.png)
 
 Others appear to have links to Cobalt Strike:
 
 ![image](https://user-images.githubusercontent.com/16122365/236944934-048b7ae0-49e6-4936-8c47-dbc777d14528.png)
 
-![image](https://user-images.githubusercontent.com/16122365/236945551-d32849d3-d53b-44b1-847d-f89348c79eaa.png)
+This was a brief example on how we can pivot off an initial network indicator and identify additional adversary infratsructure that can be used to inform defence. We could go further and start looking at the IP's and domains, file, URLs associated with them. Form this whois data may uncover further patterns that can be used to pivot to additional infrastructure. Each SSH key infromation can be checked to understand if keys have been reused.
 
+For example the below hosts are reusing an SSH key which likely means they are connected. They are also on the same subnet and hosting provider.
 
+![image](https://user-images.githubusercontent.com/16122365/236948280-6f78c774-4e24-4fd2-99fa-dd74b8701411.png)
 
-Fingerprint
-![image](https://user-images.githubusercontent.com/16122365/236939646-d0d60299-0887-4607-bb74-be7bc2edf79f.png)
+Although not fully exhaustive I hope this gives you a flavour of hunting for potentially linked C2 infrastructure for ModernLoader malware.
+
 
 
 Combined query:
-HTTP/1.1 403 Forbidden Server: nginx/1.18.0 Date: GMT Content-Type: text/html; charset=UTF-8 Content-Length: 0 Connection: keep-alive ssl:O=Company ssl:OU=Department ssl:CN=www.example.com
+https://www.shodan.io/search?query=HTTP%2F1.1+403+Forbidden+Server%3A+nginx%2F1.18.0+Date%3A+GMT+Content-Type%3A+text%2Fhtml%3B+charset%3DUTF-8+Content-Length%3A+0+Connection%3A+keep-alive+ssl%3AO%3DCompany+ssl%3AOU%3DDepartment+ssl%3ACN%3Dwww.example.com
