@@ -46,14 +46,26 @@ This is looking more interesting in terms of the results:
 
 ![image](https://user-images.githubusercontent.com/16122365/236944156-2d2b346a-cb84-4bbc-9437-a3bd885a1bc1.png)
 
-
-Lets check some in VirusTotal and see what we get. Well our original IP from the tweet is flagged as ModernLoader C2
+Lets check some in VirusTotal and see what we get. As you can see our original IP from the tweet is flagged as ModernLoader C2
 
 ![image](https://user-images.githubusercontent.com/16122365/236943371-10d52587-acdf-4393-baac-ede441e74e03.png)
 
-However other results currently have no detections:
+However some of the other results currently have no detections:
 
 ![image](https://user-images.githubusercontent.com/16122365/236943120-8e0a6f00-6c40-4695-8139-93af0bc2fefb.png)
+
+![image](https://user-images.githubusercontent.com/16122365/236945326-dfd2f561-0b8d-4404-9bb9-d12c3e40716a.png)
+
+![image](https://user-images.githubusercontent.com/16122365/236945744-7b03a5b4-84ac-4de6-99f2-2665b412efbf.png)
+
+
+
+Others appear to have links to Cobalt Strike:
+
+![image](https://user-images.githubusercontent.com/16122365/236944934-048b7ae0-49e6-4936-8c47-dbc777d14528.png)
+
+![image](https://user-images.githubusercontent.com/16122365/236945551-d32849d3-d53b-44b1-847d-f89348c79eaa.png)
+
 
 
 Fingerprint
