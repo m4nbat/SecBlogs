@@ -74,9 +74,7 @@ For example the below hosts are reusing an SSH key which likely means they are c
 
 ![image](https://user-images.githubusercontent.com/16122365/236948280-6f78c774-4e24-4fd2-99fa-dd74b8701411.png)
 
-Although not fully exhaustive I hope this gives you a flavour of hunting for potentially linked C2 infrastructure for ModernLoader malware.
-
-
+Although not fully exhaustive I hope this gives you a flavour of hunting for potentially linked C2 infrastructure based on an initial ModernLoader malware network indicator. From further analysis of the results their appears there could be a connection between some of the results and Android based malware.
 
 Combined query:
 https://www.shodan.io/search?query=HTTP%2F1.1+403+Forbidden+Server%3A+nginx%2F1.18.0+Date%3A+GMT+Content-Type%3A+text%2Fhtml%3B+charset%3DUTF-8+Content-Length%3A+0+Connection%3A+keep-alive+ssl%3AO%3DCompany+ssl%3AOU%3DDepartment+ssl%3ACN%3Dwww.example.com
