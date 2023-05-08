@@ -6,25 +6,25 @@
 
 # Hunt Flow
 
-1. The initial pivot point was to use the C2 IP posted on the tweet 62[.]204[.]41[.]23.
+The initial pivot point was to use the C2 IP posted on the tweet 62[.]204[.]41[.]23.
 
-2. I ran this against Shodan to identify the running services:
+I ran this against Shodan to identify the running services:
 
 ![image](https://user-images.githubusercontent.com/16122365/236936274-bb0fbe83-b6e0-4c9e-85e6-36f877374341.png)
 
-3. Next check the SSH hash to see if its been reused on additional infrastructure. Unfortunately its no been reused.
+Next check the SSH hash to see if its been reused on additional infrastructure. Unfortunately its no been reused.
 
 ![image](https://user-images.githubusercontent.com/16122365/236936432-0284a803-57d4-4bcb-8109-b24533b5f08f.png)
 
-4. Next lets profile the web service runnning on port 443. At first glance the certificate information is interesting
+Next lets profile the web service runnning on port 443. At first glance the certificate information is interesting
 
 ![image](https://user-images.githubusercontent.com/16122365/236937664-bc817d6b-61c4-4654-8902-4611886108d3.png)
 
-[1] First I try the hash to see whether any additional results are returned but unfortuantely no additional servers are discovered:
+First I try the hash to see whether any additional results are returned but unfortuantely no additional servers are discovered:
 
 ![image](https://user-images.githubusercontent.com/16122365/236938008-94416b67-b2dc-4f83-8328-60165c605ece.png)
 
-[2] Next I try using the header information but removing the date elements:
+Next I try using the header information but removing the date elements:
 
 ![image](https://user-images.githubusercontent.com/16122365/236938338-0bb6124e-cec1-4702-a2c8-2d090e5894d8.png)
 
@@ -44,12 +44,10 @@ HTTP/1.1 403 Forbidden Server: nginx/1.18.0 Date: GMT Content-Type: text/html; c
 
 This is looking more interesting in terms of the results:
 
+![image](https://user-images.githubusercontent.com/16122365/236944156-2d2b346a-cb84-4bbc-9437-a3bd885a1bc1.png)
 
 
-
-Lets check some in VirusTotal and see what we get:
-
-Our original IP is flagged as ModernLoader C2
+Lets check some in VirusTotal and see what we get. Well our original IP from the tweet is flagged as ModernLoader C2
 
 ![image](https://user-images.githubusercontent.com/16122365/236943371-10d52587-acdf-4393-baac-ede441e74e03.png)
 
