@@ -32,9 +32,35 @@ This returns a lot of results but I think we may have something. Hmm what about 
 
 ![image](https://user-images.githubusercontent.com/16122365/236938704-6fcea094-d59c-49ee-a915-bf2b2b3eec80.png)
 
+Okay so lets tighten up our query by including some of the certificate information as you can see below there are many ssl related filters but I'll just be a little bit lazy and use the more generic ssl: field syntax to search for some of the unique elements.
+
+![image](https://user-images.githubusercontent.com/16122365/236940071-7a50283a-ed95-4fa5-98f1-698730244fd1.png)
+
+Query:
+ssl:O=Company ssl:OU=Department ssl:CN=www.example.com
+
+Next we can combine the initial header information query with the ssl information query to refine our overall hunt query:
+HTTP/1.1 403 Forbidden Server: nginx/1.18.0 Date: GMT Content-Type: text/html; charset=UTF-8 Content-Length: 0 Connection: keep-alive ssl:O=Company ssl:OU=Department ssl:CN=www.example.com
+
+This is looking more interesting in terms of the results:
 
 
 
 
-Query from initial host port 443 profiling:
+Lets check some in VirusTotal and see what we get:
+
+Our original IP is flagged as ModernLoader C2
+
+![image](https://user-images.githubusercontent.com/16122365/236943371-10d52587-acdf-4393-baac-ede441e74e03.png)
+
+However other results currently have no detections:
+
+![image](https://user-images.githubusercontent.com/16122365/236943120-8e0a6f00-6c40-4695-8139-93af0bc2fefb.png)
+
+
+Fingerprint
+![image](https://user-images.githubusercontent.com/16122365/236939646-d0d60299-0887-4607-bb74-be7bc2edf79f.png)
+
+
+Combined query:
 HTTP/1.1 403 Forbidden Server: nginx/1.18.0 Date: GMT Content-Type: text/html; charset=UTF-8 Content-Length: 0 Connection: keep-alive ssl:O=Company ssl:OU=Department ssl:CN=www.example.com
