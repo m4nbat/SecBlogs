@@ -215,3 +215,8 @@ Defender for Cloud Apps is pretty good at this and could be used to identify and
 In conclusion, attackers are constantly adapting and finding new ways to leverage legitimate services for malicious purposes. In this case, we've demonstrated how Google Cloud Services can be used as a command and control infrastructure. By understanding the tools, procedures, and operations used by current threat groups we can perform micro emulation and understand what telemetry is available to improve our ability to detect, prevent, and respond to adversarial operations. This provides a mechanism for improving overall security posture and awareness in the faceof new threats.
 
 A big thank you to Tom Wood, Dominic Mortimer, and Joshua Penny for contributing and supporting the development of this blog!
+
+
+## SIGMA Rule:
+
+https://github.com/SigmaHQ/sigma/blob/2a2a4d9cd0ad187607c49ea815a1c96da853b41f/rules/windows/network_connection/net_connection_win_google_api_non_browser_access.yml
