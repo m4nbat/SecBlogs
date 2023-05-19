@@ -1,4 +1,4 @@
-# Attackers Leveraging Google SaaS services for Command and Control infrastructure
+# Attackers Leveraging Notion SaaS services for Command and Control infrastructure
 
 Attackers come up with creative ways to abuse cloud services for their own purposes. This blog will cover how attackers have leveraged Notion online workbooks to provide a command and control infrastructure to interact with victims via the OffensiveNotion agent. The attack flow of an attack that leverages Notion cloud infrastructure is illustrated below:
 
@@ -238,3 +238,7 @@ Defender for Cloud Apps could be used to identify and alert on a high volume of 
 # Conclusion
 
 In conclusion, attackers are constantly adapting and finding new ways to leverage legitimate services for malicious purposes. In this case, we've demonstrated how Google Cloud Services can be used as a command and control infrastructure. By understanding the tools and procedures used by current threat groups we can perform micro emulation and understand what telemetry is available to improve our ability to detect, prevent, and respond to adversarial operations, improving overall security posture and awareness of the threat.
+
+# SIGMA Rules
+
+https://github.com/SigmaHQ/sigma/blob/2a2a4d9cd0ad187607c49ea815a1c96da853b41f/rules/windows/network_connection/net_connection_win_notion_api_susp_communication.yml
