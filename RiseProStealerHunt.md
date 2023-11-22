@@ -28,6 +28,10 @@ Lets verify a few in a secure Tor browser:
 
 It looks like they are all operational. The threat actor may have modified the page title on several of the panels to avoid searching for "RisePro"
 
+Using VirusTotal to validate it looks like most are very low detection:
+
+![image](https://github.com/m4nbat/SecBlogs/assets/16122365/3bc63e08-0d1a-4f4d-a6a1-fe9001923737)
+
 #threathunting #malicious #infrastructure #malware #risepro #infostealer #informationstealer #stealer #fofa #threatinformed #threatintelligence #cti
 
 
