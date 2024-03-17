@@ -66,20 +66,21 @@ https://www.shodan.io/search?query=http.html_hash%3A-618752581+ssl%3A%22Subject%
 ![image](https://github.com/m4nbat/SecBlogs/assets/16122365/06338e16-9756-42a8-ab71-d4385411e842)
 
 
-### Results:
+### Initial Results:
 
 42.[193.106.237
 43.[129.175.251
 43.[129.184.244
 43.[135.34.69
-49.[232.29.245
+**49.[232.29.245**
 49.[234.165.142
 69.[234.233.153
 119[.27.176.138
 123.[56.218.157
 175.[24.254.64
-218.[19.148.82
+218.[19.148.
 
+Checking the results in VT only 1 is flagged as bad and has links to Cobalt Strike. Lets refine our rule with SSL info.
 
 
 ## JARM:
@@ -92,10 +93,17 @@ https://www.shodan.io/search?query=http.html_hash%3A-618752581+http.headers_hash
 
 ![image](https://github.com/m4nbat/SecBlogs/assets/16122365/b6eb76dd-cbab-465b-a764-130579b87081)
 
+## Results:
 
+42.193.106.237
+43.129.175.251
+43.129.184.244
+43.135.34.69
+**49.232.29.245**
 
 ## Validating the HTTP 301 rule results:
 
+These look better but still only 1 is flagged as malicious. There are no communicating files for some of these IPs so this could mean they are not yet used / detected.
 
 
 # Another redirect possibility:
