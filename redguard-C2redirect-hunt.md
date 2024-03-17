@@ -103,7 +103,13 @@ https://www.shodan.io/search?query=http.html_hash%3A-618752581+http.headers_hash
 
 ## Validating the HTTP 301 rule results:
 
-These look better but still only 1 is flagged as malicious. There are no communicating files for some of these IPs so this could mean they are not yet used / detected.
+These look better but still only 1 is flagged as malicious. 
+
+
+![image](https://github.com/m4nbat/SecBlogs/assets/16122365/05c7f6c3-a4eb-418b-8b75-3c6684098477)
+
+
+There are no communicating files for some of these IPs so this could mean that they are not yet used / detected.
 
 
 # Another redirect possibility:
