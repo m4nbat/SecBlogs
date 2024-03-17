@@ -68,6 +68,15 @@ https://www.shodan.io/search?query=http.html_hash%3A-618752581+ssl%3A%22Subject%
 
 ### Initial Results:
 
+**HTTP (Port 80)**
+
+43.129.175.251
+43.129.184.244
+43.135.34.69
+49.232.29.245
+
+**SSL:**
+
 42.[193.106.237
 43.[129.175.251
 43.[129.184.244
@@ -78,7 +87,7 @@ https://www.shodan.io/search?query=http.html_hash%3A-618752581+ssl%3A%22Subject%
 119[.27.176.138
 123.[56.218.157
 175.[24.254.64
-218.[19.148.
+218.[19.148.82
 
 Checking the results in VT only 1 is flagged as bad and has links to Cobalt Strike. Lets refine our rule with SSL info.
 
