@@ -197,5 +197,3 @@ Looking at one of the US based IP addresses this has the redirector and it also 
 
 The rule looks good and we have identified additional infrastructure :)
 
-![image](https://github.com/m4nbat/SecBlogs/assets/16122365/5c34956e-e418-46ec-ab29-813d83d2664b)
-
